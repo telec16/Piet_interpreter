@@ -6,18 +6,32 @@
 		<script type='text/javascript' src='op_code.js'></script>
 		<script type='text/javascript' src='display.js'></script>
 		<script type='text/javascript' src='processor.js'></script>
+		<script type='text/javascript'>
+		function draw(){
+			img = [
+			[C.b, C.b, C.b, C.db, C.db, C.db, C.k, C.g, C.g, C.k],
+			[C.b, C.b, C.b, C.db, C.db, C.g, C.g, C.g, C.g, C.g],
+			[C.b, C.b, C.b, C.db, C.db, C.db, C.lm, C.m, C.dc, C.g],
+			[C.r, C.r, C.r, C.r, C.k, C.r, C.r, C.c, C.r, C.g],
+			[C.r, C.r, C.r, C.r, C.g, C.dc, C.c, C.c, C.c, C.g],
+			[C.r, C.r, C.r, C.r, C.g, C.r, C.r, C.c, C.dg, C.g]];
+		}
+		</script>
 	</head>
 
-	<body onload="updates('Stack', 'Out');">
+	<body onload="updates('Stack', 'Out'); draw();">
 	
-	<div>
-	<table>
-		<thead><tr><th>Stack</th></tr></thead>
-		<tbody id="Stack"></tbody>
-	</table>
-	</div>
-	<div id="Out">
-	</div>
+		<div>
+		<table>
+			<thead><tr><th>Stack</th></tr></thead>
+			<tbody id="Stack"></tbody>
+		</table>
+		</div>
 		
+		<div id="Out">
+		</div>
+		
+		<canvas id="Img">
+		</canvas>
 	</body>
 </html>

@@ -1,5 +1,25 @@
 /** Constants **/
 var var_size=256;
+var C = {	lr: "#FFC0C0",
+			ly: "#FFFFC0",
+			lg: "#C0FFC0",
+			lc: "#C0FFFF",
+			lb: "#C0C0FF",
+			lm: "#FFC0FF",
+			 r: "#FF0000",
+			 y: "#FFFF00",
+			 g: "#00FF00",
+			 c: "#00FFFF",
+			 b: "#0000FF",
+			 m: "#FF00FF",
+			dr: "#C00000",
+			dy: "#C0C000",
+			dg: "#00C000",
+			dc: "#00C0C0",
+			db: "#0000C0",
+			dm: "#C000C0",
+			 w: "#FFFFFF",
+			 k: "#000000"};
 
 /** Mnemonique **/
 var code = [["_nop",		"_push", 		"_pop"],
@@ -11,12 +31,20 @@ var code = [["_nop",		"_push", 		"_pop"],
 
 /** Registers **/
 var out="";		//Out buffer
+var img = [];
+
 var stack = [];	//Stack
 var DP = 0;		//Directionnal pointer 	(right, down, left, up)
 var CC = 0;		//Codel Chooser			(left, right)
+
 var HC = 0;		//Horizontal Counter
 var VC = 0;		//Vertical Counter
 var FC = 0; 	//Fail Counter
+var SR = 0;		//Size Register
+var UL = 0;		//Up Left position register
+var UR = 0;		//Up Right position register
+var DL = 0;		//Down Left position register
+var DR = 0;		//Down Right position register
 
 /** Stack manipulation **/
 function _push(v){
@@ -107,11 +135,10 @@ function _duplicate(){
 function _roll(){
 	var a=_pop();
 	var b=_pop();
-	var s=stack.slice(-b);
+	var s=stack.splice(-b);
 	a -= s.length * Math.floor(a / s.length);
-	s.push.apply(s, s.splice(0, a));
-	stack = stack.slice(0,-b);
-	stack.push.apply(stack, s);
+	[].push.apply(s, s.splice(0, a));
+	[].push.apply(stack, s);
 }
 
 /** IO **/

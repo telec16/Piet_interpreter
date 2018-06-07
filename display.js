@@ -9,7 +9,7 @@ function updateStack(div){
 	
 	var table="";
 	for(var i=stack.length-1; i>=0; i--){
-		table += "<tr><td>" + stack[i].toString() + "</td></tr>";
+		table += "<tr><td>" + stack[i].toString() + "</td><td>" + String.fromCharCode(stack[i]) + "</td></tr>";
 	}
 	el.innerHTML=table;
 	
@@ -21,5 +21,11 @@ function uptdateOut(div){
 	el.innerHTML=out;
 	
 	setTimeout(uptdateOut, 100, div);
+}
+
+function updateImg(div){
+	el = document.getElementById(div);
+	
+	
 }
 
