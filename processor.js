@@ -1,30 +1,181 @@
+var cycleButton;
+var fcycleButton;
 
-function cycle(hueDiff, lumDiff){
+function start(){
+	cycleButton = document.getElementById("cycle");
+	fcycleButton = document.getElementById("fcycle");
 	
-	eval(code[hueDiff][lumDiff] + "()");
+	running=true;
+	cycleButton.removeAttribute("disabled");
+	fcycleButton.removeAttribute("disabled");
+}
+function cycle(fast){
+	if(running){
+		if(FC>=8){
+			running=false;
+			cycleButton.setAttribute("disabled", "true");
+			fcycleButton.setAttribute("disabled", "true");
+		}
+		else {
+			blocProperties(HC, VC);
+			if(!moveAndExecute() && fast)
+				cycle(fast);
+		}
+	}
 }
 
-function move(){
+function execute(fromColor, toColor){
+	if(fromColor != C.w){
+		var hueDiff = (6-hueOf(fromColor)+hueOf(toColor))%6;
+		var lumDiff = (3-lumOf(fromColor)+lumOf(toColor))%3;
+		IR = code[hueDiff][lumDiff];
+		eval(IR + "();");
+	}
+}
+
+function moveAndExecute(){
+	var x,y;
+	if(CC){ //Right
+		x = RR[0];
+		y = RR[1];
+	}else{ //Left
+		x = LR[0];
+		y = LR[1];
+	}
+	
+	var fromColor = moveToNext(x, y);
+	if(fromColor === false){ //Can't move
+		FC++;
+		if(FC%2)
+			CC = 1-CC;
+		else
+			DP = (DP+1)%4;
+		
+		return false;
+	}
+	else{
+		FC=0;
+		execute(fromColor, img[VC][HC]); //Next op
+		updateImg();
+		
+		return true;
+	}
+}
+
+function moveToNext(x, y){
+	var xLen = img[0].length;
+	var yLen = img.length;
+	var fromColor = img[y][x];
+	
 	switch(DP){
 	case 0: //Right
-		if(CC) VC++; 	//Down
-		else VC--;		//Up
+		x++;
 		break;
 		
 	case 1: //Down
-		if(CC) HC--; 	//Left
-		else HC++;		//Right
+		y++;
 		break;
 		
 	case 2: //Left
-		if(CC) VC--;	//Up
-		else VC++; 		//Down
+		x--;
 		break;
 		
 	case 3: //Up
-		if(CC) HC++;	//Right
-		else HC--; 		//Left
+		y--;
 		break;
 	}
 	
+	if((x<0) || (y<0) || (x>=xLen) || (y>=yLen)){ //Out of bound
+		return false;
+	}
+	if(img[y][x] == C.k){ //Wall
+		return false;
+	}
+	if(img[y][x] == C.w){ //White
+		return moveToNext(x, y);
+	}
+	
+	VC = y;
+	HC = x;
+	
+	return fromColor;
+}
+
+
+function blocProperties(x, y) {
+	var xLen = img[0].length;
+	var yLen = img.length;
+	var counted = Array(yLen).fill(false).map(x => Array(xLen).fill(false));
+
+	SR = 0;		//Size Register
+	LR = [x, y];//Left position register
+	RR = [x, y];//Right position register
+
+	
+	function setMax(x, y){
+		switch(DP){
+		case 0: //Right
+			if((LR[0] < x) || ((LR[1] > y) && (LR[0] <= x))) 
+				LR = [x, y];
+			if((RR[0] < x) || ((RR[1] < y) && (RR[0] <= x))) 
+				RR = [x, y];
+			break;
+			
+		case 1: //Down
+			if((LR[1] < y) || ((LR[0] < x) && (LR[1] <= y))) 
+				LR = [x, y];
+			if((RR[1] < y) || ((RR[0] > x) && (RR[1] <= y))) 
+				RR = [x, y];
+			break;
+			
+		case 2: //Left
+			if((LR[0] > x) || ((LR[1] < y) && (LR[0] >= x))) 
+				LR = [x, y];
+			if((RR[0] > x) || ((RR[1] > y) && (RR[0] >= x))) 
+				RR = [x, y];
+			break;
+			
+		case 3: //Up
+			if((LR[1] > y) || ((LR[0] > x) && (LR[1] >= y))) 
+				LR = [x, y];
+			if((RR[1] > y) || ((RR[0] < x) && (RR[1] >= y))) 
+				RR = [x, y];
+			break;
+		}
+	}
+	
+	function crawler(x, y, color){
+	  if(img[y] && img[y][x]) {
+		if(img[y][x] != color || counted[y][x])
+		  return;
+	  
+		SR++;
+		setMax(x, y);
+		counted[y][x] = true;
+		
+		crawler(x, y+1, color);
+		crawler(x, y-1, color);
+		crawler(x-1, y, color);
+		crawler(x+1, y, color);
+	  }
+	}
+	
+	crawler(x, y, img[y][x]);
+}
+
+function hueOf(color){
+	for(var hue=0; hue<6; hue++){
+		for(var lum=0; lum<3; lum++){
+			if(color == color_table[lum][hue])
+				return hue;
+		}
+	}
+}
+function lumOf(color){
+	for(var hue=0; hue<6; hue++){
+		for(var lum=0; lum<3; lum++){
+			if(color == color_table[lum][hue])
+				return lum;
+		}
+	}
 }

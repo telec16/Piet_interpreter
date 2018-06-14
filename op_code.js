@@ -21,34 +21,46 @@ var C = {	lr: "#FFC0C0",
 			 w: "#FFFFFF",
 			 k: "#000000"};
 
+var color_table = [ [C.lr, C.ly, C.lg, C.lc, C.lb, C.lm],
+					[C. r, C. y, C. g, C. c, C. b, C. m],
+					[C.dr, C.dy, C.dg, C.dc, C.db, C.dm] ];
+
 /** Mnemonique **/
 var code = [["_nop",		"_push", 		"_pop"],
-			["_add",		"_subtract",	"_multiply"],
+			["_add",		"_substract",	"_multiply"],
 			["_divide",		"_mod",			"_not"],
 			["_greater",	"_pointer",		"_switch"],
 			["_duplicate",	"_roll",		"_in_nb"],
 			["_in_chr",		"_out_nb",		"_out_chr"]];
 
 /** Registers **/
+var running=false;
 var out="";		//Out buffer
 var img = [];
 
 var stack = [];	//Stack
 var DP = 0;		//Directionnal pointer 	(right, down, left, up)
 var CC = 0;		//Codel Chooser			(left, right)
+var IR = "_nop";//Instruction Register
 
 var HC = 0;		//Horizontal Counter
 var VC = 0;		//Vertical Counter
 var FC = 0; 	//Fail Counter
 var SR = 0;		//Size Register
-var UL = 0;		//Up Left position register
-var UR = 0;		//Up Right position register
-var DL = 0;		//Down Left position register
-var DR = 0;		//Down Right position register
+var LR = [0, 0];//Left position register
+var RR = [0, 0];//Right position register
+
+// var UL = [0, 0];//Up Left position register
+// var UR = [0, 0];//Up Right position register
+// var DL = [0, 0];//Down Left position register
+// var DR = [0, 0];//Down Right position register
 
 /** Stack manipulation **/
-function _push(v){
-	stack.push((v%var_size)||0);
+function _push(r){
+	if(r != undefined)
+		stack.push((r%var_size)||0);
+	else
+		stack.push((SR%var_size)||0);
 }
 
 function _pop(){
