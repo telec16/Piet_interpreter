@@ -12,11 +12,11 @@
 			[C.b, C.b, C.b, C.db, C.db, C.db, C.k, C.g, C.g, C.k],
 			[C.b, C.b, C.b, C.db, C.db, C.g, C.g, C.g, C.g, C.g],
 			[C.b, C.b, C.b, C.db, C.db, C.db, C.lb, C.dm, C.dc, C.g],
-			[C.r, C.r, C.k, C.r, C.r, C.r, C.r, C.c, C.r, C.g],
-			[C.r, C.r, C.c, C.db, C.lc, C.dc, C.c, C.c, C.c, C.g],
-			[C.k, C.k, C.c, C.k, C.k, C.dc, C.dc, C.c, C.dg, C.g],
-			[C.k, C.c, C.c, C.c, C.k, C.r, C.r, C.c, C.dg, C.dg],
-			[C.k, C.k, C.k, C.k, C.k, C.r, C.r, C.c, C.c, C.lg],
+			[C.r, C.k, C.db, C.lc, C.dc, C.c, C.db, C.c, C.dg, C.g],
+			[C.r, C.w, C.c, C.db, C.lc, C.dc, C.c, C.c, C.c, C.g],
+			[C.r, C.w, C.lc, C.c, C.db, C.dc, C.dc, C.c, C.dg, C.g],
+			[C.w, C.w, C.w, C.k, C.r, C.r, C.r, C.c, C.dg, C.dg],
+			[C.k, C.k, C.k, C.k, C.r, C.r, C.r, C.c, C.c, C.lg],
 			[C.y, C.y, C.k, C.k, C.k, C.k, C.k, C.k, C.c, C.dc],
 			[C.y, C.y, C.k, C.y, C.y, C.y, C.y, C.k, C.c, C.db],
 			[C.y, C.y, C.k, C.y, C.y, C.y, C.y, C.k, C.c, C.db] ];
@@ -28,28 +28,33 @@
 
 	<body onload="updates('Stack', 'Out', 'Reg', 'Img'); draw();">
 	
-		<input type="button" onclick="start();" value="start"/>
-		<input type="button" onclick="cycle(false);" value="cycle" id="cycle" disabled />
-		<input type="button" onclick="cycle(true);" value="fast cycle" id="fcycle" disabled />
-	
-		<div style="display: inline-block">
-		<table>
-			<thead><tr><th>Stack</th></tr></thead>
-			<tbody id="Stack"></tbody>
-		</table>
-		</div>
-		
-		<div style="display: inline-block">
-		<table>
-			<thead><tr><th>Register</th><th>Value</th></tr></thead>
-			<tbody id="Reg"></tbody>
-		</table>
+		<div style="display: inline-block; vertical-align: top;">
+			<div>
+				<input type="button" onclick="start();" value="start"/>
+				<input type="button" onclick="cycle(false);" value="cycle" id="cycle" disabled />
+				<input type="button" onclick="cycle(true);" value="fast cycle" id="fcycle" disabled />
+			</div>
+			<div style="display: inline-block; vertical-align: top; width:3.5em;">
+				<table>
+					<thead><tr><th>Stack</th></tr></thead>
+					<tbody id="Stack"></tbody>
+				</table>
+				</div>
+				
+				<div style="display: inline-block; vertical-align: top; width:10em;">
+				<table>
+					<thead><tr><th>Register</th><th>Value</th></tr></thead>
+					<tbody id="Reg"></tbody>
+				</table>
+			</div>
 		</div>
 				
-		<canvas id="Img" width='500' height='500' style="display: inline-block">
-		</canvas>
-		
-		<div id="Out">
+		<div style="display: inline-block; vertical-align: top;">
+			<canvas id="Img" width='500' height='500'>
+			</canvas>
+			
+			<div id="Out">
+			</div>
 		</div>
 		
 	</body>

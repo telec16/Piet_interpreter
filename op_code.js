@@ -50,10 +50,6 @@ var SR = 0;		//Size Register
 var LR = [0, 0];//Left position register
 var RR = [0, 0];//Right position register
 
-// var UL = [0, 0];//Up Left position register
-// var UR = [0, 0];//Up Right position register
-// var DL = [0, 0];//Down Left position register
-// var DR = [0, 0];//Down Right position register
 
 /** Stack manipulation **/
 function _push(r){
@@ -64,7 +60,7 @@ function _push(r){
 }
 
 function _pop(){
-	return stack.pop();
+	return stack.pop()||0;
 }
 
 /** Arithmetical operation **/
@@ -114,7 +110,7 @@ function _mod(){
 function _not(){
 	var a=_pop();
 	var r=!a;
-	_push(a);
+	_push(r);
 }
 
 function _greater(){
@@ -125,6 +121,9 @@ function _greater(){
 }
 
 /** Flow **/
+function _nop(){
+}
+
 function _pointer(){
 	var a=_pop();
 	DP += a;
@@ -144,6 +143,27 @@ function _duplicate(){
 	_push(a);
 }
 
+//a>0 => Top to bottom, a<0 => Bottom to top
+function _roll(){
+	var a=_pop();
+	var b=_pop();
+	var temp_stack = [];
+	var temp = 0;
+	
+	for(var j=0; j<Math.abs(a); j++)
+	{
+		if(a>0) temp = _pop();
+		for(var i=0; i<(b-1); i++)
+			temp_stack.push(_pop());
+		if(a<0) temp = _pop();
+		
+		if(a>0) _push(temp);
+		for(var i=0; i<(b-1); i++)
+			_push(temp_stack.pop());
+		if(a<0) _push(temp);
+	}
+}
+/* To much advanced
 function _roll(){
 	var a=_pop();
 	var b=_pop();
@@ -151,12 +171,12 @@ function _roll(){
 	a -= s.length * Math.floor(a / s.length);
 	[].push.apply(s, s.splice(0, a));
 	[].push.apply(stack, s);
-}
+}*/
 
 /** IO **/
 function _in_nb(){
 	var a=prompt("IN (number)")||"0";
-	a=(parseInt(a)|0)%var_size;
+	a=parseInt(a)||0;
 	_push(a);
 }
 

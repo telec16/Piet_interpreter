@@ -1,13 +1,16 @@
 var cycleButton;
 var fcycleButton;
+var imgInt;
 
 function start(){
 	cycleButton = document.getElementById("cycle");
 	fcycleButton = document.getElementById("fcycle");
 	
+	blocProperties(HC, VC);
 	running=true;
 	cycleButton.removeAttribute("disabled");
 	fcycleButton.removeAttribute("disabled");
+	imgInt = setInterval(updateImg, 500);
 }
 function cycle(fast){
 	if(running){
@@ -15,22 +18,42 @@ function cycle(fast){
 			running=false;
 			cycleButton.setAttribute("disabled", "true");
 			fcycleButton.setAttribute("disabled", "true");
+			clearInterval(imgInt);
 		}
 		else {
+			var fail = !moveAndExecute();
 			blocProperties(HC, VC);
-			if(!moveAndExecute() && fast)
+			if(fail && fast)
 				cycle(fast);
 		}
 	}
 }
 
 function execute(fromColor, toColor){
-	if(fromColor != C.w){
-		var hueDiff = (6-hueOf(fromColor)+hueOf(toColor))%6;
-		var lumDiff = (3-lumOf(fromColor)+lumOf(toColor))%3;
-		IR = code[hueDiff][lumDiff];
-		eval(IR + "();");
+	var hF=0, lF=0;
+	var hT=0, lT=0;
+	
+	if((fromColor != C.w) && (toColor != C.w))
+	{
+		for(var hue=0; hue<6; hue++){
+			for(var lum=0; lum<3; lum++){
+				if(fromColor == color_table[lum][hue]){
+					lF = lum;
+					hF = hue;
+				}
+				if(toColor == color_table[lum][hue]){
+					lT = lum;
+					hT = hue;
+				}
+			}
+		}
 	}
+	
+	var hueDiff = (6-hF+hT)%6;
+	var lumDiff = (3-lF+lT)%3;
+	
+	IR = code[hueDiff][lumDiff];
+	eval(IR + "();");
 }
 
 function moveAndExecute(){
@@ -56,7 +79,6 @@ function moveAndExecute(){
 	else{
 		FC=0;
 		execute(fromColor, img[VC][HC]); //Next op
-		updateImg();
 		
 		return true;
 	}
@@ -91,9 +113,9 @@ function moveToNext(x, y){
 	if(img[y][x] == C.k){ //Wall
 		return false;
 	}
-	if(img[y][x] == C.w){ //White
+	/*if(img[y][x] == C.w){ //White
 		return moveToNext(x, y);
-	}
+	}*/
 	
 	VC = y;
 	HC = x;
@@ -161,21 +183,4 @@ function blocProperties(x, y) {
 	}
 	
 	crawler(x, y, img[y][x]);
-}
-
-function hueOf(color){
-	for(var hue=0; hue<6; hue++){
-		for(var lum=0; lum<3; lum++){
-			if(color == color_table[lum][hue])
-				return hue;
-		}
-	}
-}
-function lumOf(color){
-	for(var hue=0; hue<6; hue++){
-		for(var lum=0; lum<3; lum++){
-			if(color == color_table[lum][hue])
-				return lum;
-		}
-	}
 }
