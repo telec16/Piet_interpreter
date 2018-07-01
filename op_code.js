@@ -188,7 +188,7 @@ function _in_chr(){
 
 function _out_nb(){
 	var a=_pop();
-	out += a.toString;
+	out += a.toString();
 }
 
 function _out_chr(){

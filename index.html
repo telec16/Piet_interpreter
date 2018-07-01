@@ -6,6 +6,7 @@
 		<script type='text/javascript' src='op_code.js'></script>
 		<script type='text/javascript' src='display.js'></script>
 		<script type='text/javascript' src='processor.js'></script>
+		<script type='text/javascript' src='loader.js'></script>
 		<script type='text/javascript'>
 		function draw(){
 			img = [
@@ -26,11 +27,15 @@
 		</script>
 	</head>
 
-	<body onload="updates('Stack', 'Out', 'Reg', 'Img'); draw();">
+	<body onload="updates('Stack', 'Out', 'Reg', 'Img', 'File'); draw();">
 	
 		<div style="display: inline-block; vertical-align: top;">
 			<div>
+				<input type="file" id="File"/>
+			</div>
+			<div>
 				<input type="button" onclick="start();" value="start"/>
+				<input type="button" onclick="run();" value="run"/>
 				<input type="button" onclick="cycle(false);" value="cycle" id="cycle" disabled />
 				<input type="button" onclick="cycle(true);" value="fast cycle" id="fcycle" disabled />
 			</div>

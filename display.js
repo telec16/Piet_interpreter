@@ -1,10 +1,11 @@
 var divImg;
 
-function updates(Stack, Out, Reg, Img){
+function updates(Stack, Out, Reg, Img, File){
 	updateStack(Stack);
 	uptdateOut(Out);
-	updateRegisters(Reg)
+	updateRegisters(Reg);
 	divImg=Img;
+	startFileListener(File);
 }
 
 function updateStack(div){
@@ -48,8 +49,8 @@ function uptdateOut(div){
 }
 
 function updateImg(){
-	cnv = document.getElementById(divImg);
-	ctx = cnv.getContext("2d");
+	var cnv = document.getElementById(divImg);
+	var ctx = cnv.getContext("2d");
 	
 	var xSize=cnv.width;
 	var ySize=cnv.height;
